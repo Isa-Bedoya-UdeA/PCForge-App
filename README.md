@@ -1,56 +1,204 @@
-# Welcome to your Expo app 👋
+# PCForge Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Expo](https://img.shields.io/badge/expo-%231C1E24.svg?style=for-the-badge&logo=expo&logoColor=#D04A37)
+![PNPM](https://img.shields.io/badge/pnpm-%234a4a4a.svg?style=for-the-badge&logo=pnpm&logoColor=f69220)
+![CI](https://img.shields.io/badge/CI-GitHub_Actions-22c55e.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
-## Get started
+> A local-first mobile app for discovering PC components and planning custom builds. Built with React Native, Expo Router, Zustand, and TypeScript.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## Project Information
 
-2. Start the app
+| Field | Value |
+| --- | --- |
+| Status | Classroom-Ready & CI Verified |
+| Platform | Android (Expo SDK 54+), iOS, Web |
+| Language | TypeScript (Strict mode) |
+| UI Architecture | Atomic Design (Atoms, Molecules, Organisms, UI) & Theme Tokens |
+| State Management | Zustand with AsyncStorage Local-First Persistence |
+| Repository | [GitHub](https://github.com/Isa-Bedoya-UdeA/PCForge-App) |
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## Overview
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+PCForge Mobile helps users browse an extensive computer hardware catalog, assemble custom PC configurations, evaluate hardware compatibility (socket match, RAM memory standard, form factor clearances), and estimate real-time power consumption with safe PSU recommendations.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+The core application works **completely offline for saved builds and favorites** using local device storage (`AsyncStorage`). When connected to the local network or internet, it consumes hardware data from the backend `pcforge-api`.
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## Tech Stack & Architecture
 
-```bash
-npm run reset-project
+| Layer | Technology | Purpose |
+| --- | --- | --- |
+| **Language** | TypeScript (ES2022) | Full static type safety across domains, components, and stores |
+| **Framework** | Expo (SDK 54+) & React Native 0.86 | Cross-platform native mobile runtime |
+| **Navigation** | Expo Router (v54) | File-based routing (`/explore`, `/builds`, `/components/[id]`, `/favorites`) |
+| **State** | Zustand (v5) | Reactive state stores (`useBuildStore`, `useFavoritesStore`) |
+| **Persistence** | `@react-native-async-storage/async-storage` | Local on-device persistence resilient to corruption |
+| **Networking** | Fetch API (`HttpClient`) | Typed client with 5000ms timeouts and structured error mappings |
+| **Design System** | Atomic Design (`atoms`, `molecules`, `organisms`) | Reusable UI components styled with dark/light design tokens |
+| **CI/CD** | GitHub Actions (`build.yml`) | Automated linting, typecheck, and unit/integration testing |
+
+---
+
+## Project Structure (Atomic Design)
+
+```text
+client/
+├── .github/
+│   └── workflows/
+│       └── build.yml               # GitHub Actions CI workflow
+├── src/
+│   ├── app/                        # Expo Router screen routes
+│   │   ├── _layout.tsx             # Root layout with theme and splash hydration
+│   │   ├── index.tsx               # Redirect to /explore
+│   │   ├── explore.tsx             # Catalog discovery, search & filtering
+│   │   ├── favorites.tsx           # Favorited hardware parts
+│   │   ├── builds/
+│   │   │   ├── index.tsx           # Saved builds overview & actions
+│   │   │   ├── create.tsx          # Build creation modal/form
+│   │   │   └── [id].tsx            # Build detail, slots, compatibility & power
+│   │   └── components/
+│   │       ├── index.tsx           # Redirect to /explore
+│   │       └── [id].tsx            # Hardware technical specifications detail
+│   ├── components/                 # Atomic Design Component Catalog
+│   │   ├── atoms/                  # ThemedText, ThemedView, LoadingSkeleton
+│   │   ├── molecules/              # EmptyView, ErrorView, SpecRow, HintRow
+│   │   ├── organisms/              # ComponentCard, SlotItem, CompatibilityBanner, PowerSummary
+│   │   ├── ui/                     # Collapsible and layout helpers
+│   │   ├── animated-icon.tsx       # Splash screen animation
+│   │   └── app-tabs.tsx            # Bottom navigation bar
+│   ├── constants/                  # Theme tokens, API config, category definitions
+│   ├── services/                   # api.ts (HttpClient), components.service.ts, storage.service.ts
+│   ├── stores/                     # build.store.ts, favorites.store.ts
+│   ├── types/                      # Domain entities (Component, Build, Compatibility)
+│   ├── utils/                      # compatibility.ts, power.ts (pure domain math)
+│   └── tests/                      # Unit & integration test suites
+│       ├── integration/            # components-service.test.ts
+│       ├── mocks/                  # react-native mock
+│       └── unit/                   # compatibility, power, build.store, favorites.store, storage
+└── docs/                           # Comprehensive engineering documentation
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-### Other setup steps
+## Getting Started
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+### Prerequisites
 
-## Learn more
+* **Node.js**: v20.x or v22.x LTS
+* **pnpm**: v9.x or v10.x (`npm install -g pnpm`)
+* **Expo Go App** (optional): Installed on your physical Android or iOS device from Google Play / App Store.
 
-To learn more about developing your project with Expo, look at the following resources:
+### 1. Installation
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+From the `client` folder:
 
-## Join the community
+```bash
+pnpm install
+```
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### 2. Classroom & Physical Device LAN Demo Setup
+
+To demonstrate the mobile app running on physical mobile devices during a live classroom presentation connecting to the local `pcforge-api`:
+
+#### Step 1: Find Host Machine's Local IP
+Open a terminal on the host computer running the API:
+* **Windows**: Run `ipconfig` and find the **IPv4 Address** of your active Wi-Fi adapter (e.g., `192.168.1.85`).
+* **macOS / Linux**: Run `ifconfig` or `ip a` (e.g., `192.168.1.85`).
+
+#### Step 2: Configure Environment Variable
+In `client/`, set your environment variable or update `.env`:
+
+```bash
+EXPO_PUBLIC_API_URL=http://<YOUR_LOCAL_IP>:3000
+```
+
+*(Example: `EXPO_PUBLIC_API_URL=http://192.168.1.85:3000`)*
+
+> [!TIP]
+> If testing purely on the **Android Emulator**, Expo will automatically fallback to `http://10.0.2.2:3000`.
+
+#### Step 3: Run the Backend API
+In the `api/` directory:
+```bash
+pnpm dev
+```
+*(Verify it displays `API listening on http://0.0.0.0:3000`)*.
+
+#### Step 4: Start the Mobile Application
+In the `client/` directory:
+```bash
+pnpm start
+```
+* Press `a` to open in an attached Android Emulator.
+* Press `w` to open in the Web Browser.
+* Or **scan the generated QR Code** using the **Expo Go** app on your physical mobile phone connected to the **same Wi-Fi network**.
+
+#### Step 5: Test Offline Resilience (Demo Flow)
+1. In the app, browse components and favorite 2 items.
+2. Create a new build named "Classroom Demo Rig" and assign a CPU, Motherboard, and RAM.
+3. Observe live compatibility verification (Green/Amber) and power calculation.
+4. **Turn OFF Wi-Fi** or disconnect mobile internet on the phone.
+5. Notice that navigating to **My Builds** and **Favorites** still displays all saved configurations without crashes or data loss thanks to `AsyncStorage`.
+
+---
+
+## Quality Gates & Verification
+
+All code adheres to strict linting, TypeScript typing, and automated testing gates:
+
+```bash
+# 1. Run ESLint static analysis
+pnpm run lint
+
+# 2. Run TypeScript strict type verification
+pnpm run typecheck
+
+# 3. Run Jest unit and integration test suite
+pnpm test
+```
+
+---
+
+## Continuous Integration (CI/CD)
+
+The repository includes a GitHub Actions workflow located at [.github/workflows/build.yml](.github/workflows/build.yml). On every push or pull request to `main`, `master`, or `develop`, the workflow executes:
+
+1. **Dependency Installation**: `pnpm install --frozen-lockfile`
+2. **Linting**: `pnpm run lint`
+3. **Typecheck**: `pnpm run typecheck`
+4. **Automated Testing**: `pnpm test` (Unit and Integration suites)
+
+No cloud secrets or external databases are required for the pipeline to pass.
+
+---
+
+## Documentation Index
+
+| Document | Description |
+| --- | --- |
+| [CONSTITUTION.md](./docs/CONSTITUTION.md) | Non-negotiable architectural principles and technical boundaries. |
+| [SPEC.md](./docs/SPEC.md) | Product and feature specifications. |
+| [REQUIREMENTS.md](./docs/REQUIREMENTS.md) | Functional (FR-001–FR-023) and Non-Functional (NFR) requirements. |
+| [PLAN.md](./docs/PLAN.md) | Technical implementation plan and milestones. |
+| [TASKS.md](./docs/TASKS.md) | Structured task breakdown and verification traceability. |
+| [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Complete system architecture, state flow, and storage patterns. |
+| [DESIGNSYSTEM.md](./docs/DESIGNSYSTEM.md) | Color palettes, typography, spacing tokens, and component catalog. |
+| [NAVIGATIONMAP.md](./docs/NAVIGATIONMAP.md) | Route map and user interaction flows. |
+| [USERJOURNEY.md](./docs/USERJOURNEY.md) | Personas, user journeys, and UX wireframe specifications. |
+| [SECURITY.md](./docs/SECURITY.md) | Security controls, input sanitization, and data protection policies. |
+
+---
+
+## Contributors
+
+* **Isabela Bedoya Gaviria** — Software Engineering Student, Universidad de Antioquia
+* **Rafael Aleman** — Software Engineering Student, Universidad de Antioquia

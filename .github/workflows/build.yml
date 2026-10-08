@@ -1,0 +1,39 @@
+name: Client CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  validate:
+    name: Lint, Typecheck & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm package manager
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Set up Node.js runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install project dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify static analysis & code style (ESLint)
+        run: pnpm run lint
+
+      - name: Verify strict TypeScript compilation
+        run: pnpm run typecheck
+
+      - name: Run automated unit and integration tests
+        run: pnpm test
