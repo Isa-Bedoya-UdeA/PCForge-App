@@ -322,6 +322,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.md,
+    paddingBottom: 110,
     gap: Spacing.md,
     maxWidth: 800,
     width: '100%',

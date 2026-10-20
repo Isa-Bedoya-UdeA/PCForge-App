@@ -31,6 +31,12 @@ The core application works **completely offline for saved builds and favorites**
 
 ---
 
+## Application Preview
+
+![PCForge Component Catalog Screen](./docs/screenshots/catalog-screen.jpg)
+
+---
+
 ## Tech Stack & Architecture
 
 | Layer | Technology | Purpose |
@@ -110,11 +116,14 @@ pnpm install
 To demonstrate the mobile app running on physical mobile devices during a live classroom presentation connecting to the local `pcforge-api`:
 
 #### Step 1: Find Host Machine's Local IP
+
 Open a terminal on the host computer running the API:
+
 * **Windows**: Run `ipconfig` and find the **IPv4 Address** of your active Wi-Fi adapter (e.g., `192.168.1.85`).
 * **macOS / Linux**: Run `ifconfig` or `ip a` (e.g., `192.168.1.85`).
 
 #### Step 2: Configure Environment Variable
+
 In `client/`, set your environment variable or update `.env`:
 
 ```bash
@@ -123,26 +132,36 @@ EXPO_PUBLIC_API_URL=http://<YOUR_LOCAL_IP>:3000
 
 *(Example: `EXPO_PUBLIC_API_URL=http://192.168.1.85:3000`)*
 
+> [!NOTE]
+> Setting `EXPO_PUBLIC_API_URL` is completely **optional**! When opening the app through **Expo Go**, PCForge automatically detects your computer's local IP address from the Metro development server.
+>
 > [!TIP]
 > If testing purely on the **Android Emulator**, Expo will automatically fallback to `http://10.0.2.2:3000`.
 
 #### Step 3: Run the Backend API
+
 In the `api/` directory:
+
 ```bash
 pnpm dev
 ```
+
 *(Verify it displays `API listening on http://0.0.0.0:3000`)*.
 
 #### Step 4: Start the Mobile Application
+
 In the `client/` directory:
+
 ```bash
 pnpm start
 ```
+
 * Press `a` to open in an attached Android Emulator.
 * Press `w` to open in the Web Browser.
 * Or **scan the generated QR Code** using the **Expo Go** app on your physical mobile phone connected to the **same Wi-Fi network**.
 
 #### Step 5: Test Offline Resilience (Demo Flow)
+
 1. In the app, browse components and favorite 2 items.
 2. Create a new build named "Classroom Demo Rig" and assign a CPU, Motherboard, and RAM.
 3. Observe live compatibility verification (Green/Amber) and power calculation.

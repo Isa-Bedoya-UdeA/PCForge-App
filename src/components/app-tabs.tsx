@@ -1,12 +1,19 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Image, Platform, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Fonts } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export default function AppTabs() {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
+
+  // On Android with 3 system buttons or gestures, insets.bottom provides the system bar height (typically 24-48dp).
+  // We ensure sufficient bottom clearance so system buttons never overlap the tab bar.
+  const bottomInset = Math.max(insets.bottom, Platform.OS === 'android' ? 16 : 24);
+  const tabHeight = 58 + bottomInset;
 
   return (
     <Tabs
@@ -16,8 +23,8 @@ export default function AppTabs() {
           backgroundColor: theme.surface,
           borderTopColor: theme.border,
           borderTopWidth: 1,
-          height: Platform.OS === 'ios' ? 84 : 64,
-          paddingBottom: Platform.OS === 'ios' ? 24 : 10,
+          height: tabHeight,
+          paddingBottom: bottomInset,
           paddingTop: 8,
         },
         tabBarActiveTintColor: theme.primary,
